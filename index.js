@@ -1,8 +1,8 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
-
 const cors = require('cors');
+const admin = require("firebase-admin");
 require('dotenv').config();
 
 const app = express();
@@ -114,6 +114,24 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.json(result);
         });
+
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            const requester = req.decodedEmail;
+            if (requester) {
+                const requesterAccount = await usersCollection.findOne({ email: requester });
+                if (requesterAccount.role === 'admin') {
+                    const filter = { email: user.email };
+                    const updateDoc = { $set: { role: 'admin' } };
+                    const result = await usersCollection.updateOne(filter, updateDoc);
+                    res.json(result);
+                }
+            }
+            else {
+                res.status(403).json({ message: 'you do not have access to make admin' })
+            }
+
+        })
     }
     finally {
 
