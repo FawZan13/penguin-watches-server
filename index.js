@@ -2,7 +2,6 @@ const express = require('express')
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
-const admin = require("firebase-admin");
 require('dotenv').config();
 
 const app = express();
