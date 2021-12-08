@@ -117,7 +117,7 @@ async function run() {
 
         app.put('/users/admin', async (req, res) => {
             const user = req.body;
-            const requester = req.decodedEmail;
+            const requester = req.email;
             if (requester) {
                 const requesterAccount = await usersCollection.findOne({ email: requester });
                 if (requesterAccount.role === 'admin') {
